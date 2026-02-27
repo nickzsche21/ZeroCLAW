@@ -1,5 +1,5 @@
 # ZeroClaw 🦞⚡
-
+(⚠️ Early alpha — community help welcome. Core logic is complete, testing + PyPI publish coming in 48hrs. Stars and PRs appreciated.)
 ### Run OpenClaw on ANY GPU with **zero API cost** — powered by AirLLM
 
 > Stop paying $50–$150/month in OpenAI/Anthropic/DeepSeek API bills just to power your OpenClaw.  
