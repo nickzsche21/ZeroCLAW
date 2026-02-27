@@ -1,6 +1,6 @@
 [build-system]
 requires = ["setuptools>=68", "wheel"]
-build-backend = "setuptools.backends.legacy:build"
+build-backend = "setuptools.build_meta"
 
 [project]
 name            = "zeroclaw"
@@ -9,35 +9,22 @@ description     = "Run OpenClaw with zero API cost — AirLLM local inference br
 readme          = "README.md"
 license         = { text = "MIT" }
 requires-python = ">=3.10"
-
-keywords = ["openclaw", "airllm", "local-llm", "ai-agent", "zero-cost"]
-
-classifiers = [
-    "Development Status :: 4 - Beta",
-    "Intended Audience :: Developers",
-    "Topic :: Scientific/Engineering :: Artificial Intelligence",
-    "License :: OSI Approved :: MIT License",
-    "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.10",
-    "Programming Language :: Python :: 3.11",
-    "Programming Language :: Python :: 3.12",
-]
+keywords        = ["openclaw", "airllm", "local-llm", "ai-agent", "zero-cost"]
 
 dependencies = [
-    "airllm>=0.8.0",
+    "airllm>=2.8.0",
     "fastapi>=0.110.0",
     "uvicorn[standard]>=0.29.0",
     "pydantic>=2.0.0",
+    "torch>=2.0.0",
 ]
 
 [project.scripts]
 zeroclaw = "zeroclaw.cli:main"
 
 [project.urls]
-Homepage      = "https://github.com/yourusername/zeroclaw"
-Documentation = "https://github.com/yourusername/zeroclaw#readme"
-Issues        = "https://github.com/yourusername/zeroclaw/issues"
+Homepage = "https://github.com/nickzsche21/ZeroCLAW"
 
 [tool.setuptools.packages.find]
-where = ["."]
+where   = ["."]
 include = ["zeroclaw*"]
