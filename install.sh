@@ -1,49 +1,35 @@
 #!/usr/bin/env bash
-# ZeroClaw installer
-# Usage: curl -fsSL https://raw.githubusercontent.com/nickzsche21/ZeroCLAW/main/install.sh | bash
-
+# AirClaw installer
+# curl -fsSL https://raw.githubusercontent.com/nickzsche21/airclaw/main/install.sh | bash
 set -e
 
 echo ""
-echo " ██████╗███████╗██████╗  ██████╗  ██████╗██╗      █████╗ ██╗    ██╗"
-echo "╚══███╔╝██╔════╝██╔══██╗██╔═══██╗██╔════╝██║     ██╔══██╗██║    ██║"
-echo "  ███╔╝ █████╗  ██████╔╝██║   ██║██║     ██║     ███████║██║ █╗ ██║"
-echo " ███╔╝  ██╔══╝  ██╔══██╗██║   ██║██║     ██║     ██╔══██║██║███╗██║"
-echo "███████╗███████╗██║  ██║╚██████╔╝╚██████╗███████╗██║  ██║╚███╔███╔╝"
-echo "╚══════╝╚══════╝╚═╝  ╚═╝ ╚═════╝  ╚═════╝╚══════╝╚═╝  ╚═╝ ╚══╝╚══╝"
+echo "    _    _      _____ _               "
+echo "   / \\  (_)_ __|  ___| | __ ___      __"
+echo "  / _ \\ | | '__| |_  | |/ _\` \\ \\ /\\ / /"
+echo " / ___ \\| | |  |  _| | | (_| |\\ V  V / "
+echo "/_/   \\_\\_|_|  |_|   |_|\\__,_| \\_/\\_/  "
 echo ""
-echo " Run OpenClaw with ZERO API cost — powered by AirLLM"
-echo " ────────────────────────────────────────────────────"
-echo ""
-
-# Check Python
-if ! command -v python3 &>/dev/null; then
-    echo "❌ Python 3 not found. Please install Python 3.10+"
-    exit 1
-fi
-
-echo "Installing ZeroClaw from GitHub..."
-pip install "git+https://github.com/nickzsche21/ZeroCLAW.git" -q \
-    || pip install "git+https://github.com/nickzsche21/ZeroCLAW.git" --break-system-packages -q
-
-echo ""
-echo "✅ ZeroClaw installed!"
+echo " Run OpenClaw with ZERO API cost"
+echo " ─────────────────────────────────────"
 echo ""
 
-# Auto-patch if OpenClaw exists
-if command -v openclaw &>/dev/null; then
-    echo "✅ OpenClaw found — patching config..."
-    zeroclaw patch
-else
-    echo "⚠️  OpenClaw not found. Install it first, then run: zeroclaw patch"
-fi
+command -v python3 &>/dev/null || { echo "❌ Python 3.10+ required"; exit 1; }
+
+echo "Installing AirClaw..."
+pip install airclaw -q || pip install airclaw --break-system-packages -q
+
+echo "Installing backends..."
+pip install rabbitllm airllm -q || pip install rabbitllm airllm --break-system-packages -q
 
 echo ""
-echo "══════════════════════════════════════════════════"
-echo "  DONE! Start ZeroClaw:"
-echo "    zeroclaw start"
+echo "✅ AirClaw installed!"
 echo ""
-echo "  Then restart OpenClaw:"
-echo "    openclaw restart"
-echo "══════════════════════════════════════════════════"
+
+command -v openclaw &>/dev/null && airclaw patch || echo "⚠️  Install OpenClaw first, then run: airclaw patch"
+
 echo ""
+echo "══════════════════════════════════"
+echo "  airclaw start    → start server"
+echo "  openclaw restart → use it"
+echo "══════════════════════════════════"

@@ -3,28 +3,32 @@ requires = ["setuptools>=68", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name            = "zeroclaw"
-version         = "1.0.0"
-description     = "Run OpenClaw with zero API cost — AirLLM local inference bridge"
+name            = "airclaw"
+version         = "2.0.0"
+description     = "Run OpenClaw with zero API cost — RabbitLLM + AirLLM local inference bridge"
 readme          = "README.md"
 license         = { text = "MIT" }
 requires-python = ">=3.10"
-keywords        = ["openclaw", "airllm", "local-llm", "ai-agent", "zero-cost"]
+keywords        = ["openclaw", "airllm", "rabbitllm", "local-llm", "ai-agent", "zero-cost", "llama", "mistral", "qwen"]
 
 dependencies = [
-    "airllm>=2.8.0",
     "fastapi>=0.110.0",
     "uvicorn[standard]>=0.29.0",
     "pydantic>=2.0.0",
     "torch>=2.0.0",
 ]
 
+[project.optional-dependencies]
+rabbitllm = ["rabbitllm"]
+airllm    = ["airllm>=2.8.0"]
+all       = ["rabbitllm", "airllm>=2.8.0"]
+
 [project.scripts]
-zeroclaw = "zeroclaw.cli:main"
+airclaw = "airclaw.cli:main"
 
 [project.urls]
-Homepage = "https://github.com/nickzsche21/ZeroCLAW"
+Homepage = "https://github.com/nickzsche21/airclaw"
 
 [tool.setuptools.packages.find]
 where   = ["."]
-include = ["zeroclaw*"]
+include = ["airclaw*"]

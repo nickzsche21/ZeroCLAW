@@ -1,20 +1,24 @@
-# ZeroClaw ⚡
+# AirClaw ⚡
 
-### Run OpenClaw on ANY GPU with **zero API cost** — powered by AirLLM
+### Run OpenClaw on ANY GPU with **zero API cost**
 
-> Stop paying $50–$150/month in API bills to power your OpenClaw.  
-> One command routes all LLM calls to a local model on your own machine. **Free. Forever. Private.**
+> Stop paying $50–$150/month in API bills.  
+> One command → local model on your machine → **$0/month. Forever.**
+
+Supports **RabbitLLM** (newer models: Qwen2.5, DeepSeek, Phi-3) and **AirLLM** as fallback.  
+Runs 70B models on a **4GB GPU**. Works on CPU too.
 
 ---
 
 ## Install
 
 ```bash
-# Option A — from GitHub (recommended until PyPI release)
-pip install git+https://github.com/nickzsche21/ZeroCLAW.git
+pip install airclaw
+```
 
-# Option B — one-liner
-curl -fsSL https://raw.githubusercontent.com/nickzsche21/ZeroCLAW/main/install.sh | bash
+Or from GitHub:
+```bash
+pip install git+https://github.com/nickzsche21/airclaw.git
 ```
 
 ---
@@ -22,17 +26,17 @@ curl -fsSL https://raw.githubusercontent.com/nickzsche21/ZeroCLAW/main/install.s
 ## Quick Start
 
 ```bash
-# Step 1 — patch your OpenClaw config (one time)
-zeroclaw patch
+# Full automated setup (do this first — one time only)
+airclaw install
 
-# Step 2 — start the local LLM server (keep this running)
-zeroclaw start
+# Then in terminal 1:
+airclaw start
 
-# Step 3 — restart OpenClaw
+# Then in terminal 2:
 openclaw restart
 ```
 
-Done. Your OpenClaw now runs locally. Zero API cost.
+Done. Your OpenClaw runs locally. Zero API cost.
 
 ---
 
@@ -40,30 +44,52 @@ Done. Your OpenClaw now runs locally. Zero API cost.
 
 | Command | What it does |
 |---------|-------------|
-| `zeroclaw start` | Start local LLM server (Mistral 7B default) |
-| `zeroclaw start --model 8b` | Start with Llama 3 8B |
-| `zeroclaw patch` | Auto-find and patch OpenClaw config |
-| `zeroclaw patch --config ~/path/config.json` | Patch specific config |
-| `zeroclaw restore` | Restore original config from backup |
-| `zeroclaw status` | Check if server is running |
-| `zeroclaw install` | Full automated setup in one command |
+| `airclaw install` | Full automated setup |
+| `airclaw start` | Start local LLM server (Mistral 7B default) |
+| `airclaw start --model qwen` | Start with Qwen2.5 |
+| `airclaw start --model deepseek` | Start with DeepSeek |
+| `airclaw patch` | Auto-patch OpenClaw config |
+| `airclaw patch --config ~/path/config.json` | Patch specific config |
+| `airclaw restore` | Restore original config |
+| `airclaw status` | Check if server is running |
 
 ---
 
 ## Models
 
-| Flag | Model | Min VRAM | Speed |
-|------|-------|----------|-------|
-| `7b` ← default | Mistral-7B-Instruct-v0.2 | 4GB | ⚡⚡⚡ |
-| `8b` | Meta-Llama-3-8B-Instruct | 6GB | ⚡⚡⚡ |
-| `13b` | Llama-2-13B-chat | 8GB | ⚡⚡ |
-| `70b` | Llama-2-70B-chat | 4GB | ⚡ slow |
+| Flag | Model | VRAM | Speed |
+|------|-------|------|-------|
+| `7b` ← default | Mistral-7B-Instruct | 4GB | ⚡⚡⚡ |
+| `8b` | Llama-3-8B-Instruct | 6GB | ⚡⚡⚡ |
+| `qwen` | Qwen2.5-7B | 4GB | ⚡⚡⚡ |
+| `deepseek` | DeepSeek-7B | 4GB | ⚡⚡⚡ |
+| `phi` | Phi-3-mini | 4GB | ⚡⚡⚡ fastest |
+| `13b` | Llama-2-13B | 8GB | ⚡⚡ |
+| `70b` | Llama-2-70B | 4GB | ⚡ slow |
 
-No GPU? Works on CPU too — just slower. The 7B model is fine on any modern laptop.
-
-Pass any HuggingFace model ID directly:
+Or pass any HuggingFace model ID:
 ```bash
-zeroclaw start --model mistralai/Mixtral-8x7B-Instruct-v0.1
+airclaw start --model mistralai/Mixtral-8x7B-Instruct-v0.1
+```
+
+---
+
+## Backends
+
+AirClaw automatically uses the best available backend:
+
+1. **RabbitLLM** (preferred) — newer models, faster, 4bit compression
+2. **AirLLM** (fallback) — battle-tested, wide compatibility
+
+Install both:
+```bash
+pip install airclaw[all]
+```
+
+Or just one:
+```bash
+pip install airclaw[rabbitllm]
+pip install airclaw[airllm]
 ```
 
 ---
@@ -73,16 +99,26 @@ zeroclaw start --model mistralai/Mixtral-8x7B-Instruct-v0.1
 ```
 WhatsApp / Telegram / Discord
          ↓
-    OpenClaw
+      OpenClaw
          ↓
-   ZeroClaw (localhost:4096)   ← replaces OpenAI/Claude API
+  AirClaw (localhost:4096)   ← replaces OpenAI/Claude API
          ↓
-      AirLLM
+  RabbitLLM or AirLLM
          ↓
   Local model on your GPU/CPU
 ```
 
-ZeroClaw runs an **OpenAI-compatible API server** on localhost. OpenClaw connects to it exactly like it would connect to OpenAI — but everything runs locally via AirLLM's layer-by-layer inference.
+AirClaw runs an OpenAI-compatible server on localhost. OpenClaw connects to it exactly like OpenAI — but everything runs on your machine.
+
+---
+
+## Cost
+
+| Setup | Monthly |
+|-------|---------|
+| OpenClaw + GPT-4o | $50–$150/mo |
+| OpenClaw + Claude | $30–$120/mo |
+| **OpenClaw + AirClaw** | **$0/mo** |
 
 ---
 
@@ -90,31 +126,13 @@ ZeroClaw runs an **OpenAI-compatible API server** on localhost. OpenClaw connect
 
 - Python 3.10+
 - OpenClaw installed
-- 4GB+ GPU or any CPU (slower)
-- 8–15GB disk space for model (downloaded once, cached forever)
-
----
-
-## Cost Comparison
-
-| Setup | Monthly Cost |
-|-------|-------------|
-| OpenClaw + OpenAI GPT-4o | $50–$150/mo |
-| OpenClaw + Claude | $30–$120/mo |
-| **OpenClaw + ZeroClaw** | **$0/mo** |
-
----
-
-## Status
-
-⚠️ Early release — core functionality working. If something breaks, open an issue and I'll fix it fast.
+- 4GB+ GPU (or CPU — slower)
+- 8–15GB disk for model weights (downloaded once)
 
 ---
 
 ## License
 
-MIT — free to use, modify, sell, whatever.
-
----
+MIT — free forever.
 
 *Star ⭐ if this saved you money.*
